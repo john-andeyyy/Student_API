@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection")) // Fix: Add this
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection")) 
     ));
 // add-migration "Initial Migration"
 // to run the migration --- update-database
