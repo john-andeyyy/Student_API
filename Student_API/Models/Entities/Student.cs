@@ -23,6 +23,6 @@ namespace Student_API.Models.Entities
 
         [ForeignKey("Address")]
         public required int AddressId { get; set; }
-        //public Address? Address { get; set; }
+        public Address? Address { get; set; }
     }
 }
