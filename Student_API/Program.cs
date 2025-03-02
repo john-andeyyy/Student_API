@@ -10,28 +10,49 @@ builder.Services.AddSwaggerGen();
 
 
 // the if else statement is used to check if the environment is development or production
-var env = builder.Environment;
+//var env = builder.Environment;
 
-string connectionString;
+//string connectionString;
 
-if(env.IsDevelopment())
+//if(env.IsDevelopment())
+//{
+//    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//}
+//else if (env.IsProduction())
+//{
+//    connectionString = builder.Configuration.GetConnectionString("ProductionConnection");
+//}
+//else
+//{
+//    throw new Exception("Invalid Environment Configuration!");
+//}
+
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//    options.UseMySql(
+//        connectionString,
+//        ServerVersion.AutoDetect(connectionString)
+//    ));
+
+string connectionString = "Server=192.168.100.109;Database=EmployeesDb;Port=3306;User=root;Password=Andrei_123!;";
+using (var scope = builder.Services.BuildServiceProvider().CreateScope())
 {
-    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-}
-else if (env.IsProduction())
-{
-    connectionString = builder.Configuration.GetConnectionString("ProductionConnection");
-}
-else
-{
-    throw new Exception("Invalid Environment Configuration!");
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    try
+    {
+        Console.WriteLine("Testing database connection...");
+        dbContext.Database.OpenConnection();
+        Console.WriteLine("Database connection successful!");
+        dbContext.Database.CloseConnection();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Error connecting to database: " + ex.Message);
+    }
 }
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(
-        connectionString,
-        ServerVersion.AutoDetect(connectionString)
-    ));
+
+
 
 
 //builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -57,6 +78,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapGet("/", () => Results.Json(new { message = "hi" }));
+app.MapGet("/", () => Results.Json(new { message = connectionString }));
 
 app.Run();
