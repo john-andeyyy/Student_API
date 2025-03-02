@@ -38,7 +38,8 @@ else
 {
     throw new Exception("Invalid Environment Configuration!");
 }
-
+Console.WriteLine("the Enviroment is:" + env);
+Console.WriteLine("THE CONNECTION STRING IS: " + connectionString);
 
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
