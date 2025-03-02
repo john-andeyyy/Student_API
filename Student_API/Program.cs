@@ -21,6 +21,7 @@ builder.Services.AddCors(options =>
 });
 
 
+
 // the if else statement is used to check if the environment is development or production
 var env = builder.Environment;
 
