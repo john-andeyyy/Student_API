@@ -34,6 +34,13 @@ builder.Services.AddSwaggerGen();
 //    ));
 
 string connectionString = "Server=192.168.100.109;Database=EmployeesDb;Port=3306;User=root;Password=Andrei_123!;";
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseMySql(
+        connectionString,
+        ServerVersion.AutoDetect(connectionString)
+    ));
+
 using (var scope = builder.Services.BuildServiceProvider().CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
