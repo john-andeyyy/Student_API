@@ -81,12 +81,12 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 
 app.Urls.Add("http://0.0.0.0:5000"); // Allow all devices in the network
-app.Urls.Add("https://0.0.0.0:5001"); // If using HTTPS
+//app.Urls.Add("https://0.0.0.0:5001"); // If using HTTPS
+//app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 
 
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
