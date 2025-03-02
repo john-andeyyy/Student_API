@@ -7,6 +7,16 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
 
 
 // the if else statement is used to check if the environment is development or production
@@ -82,16 +92,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 
 app.Urls.Add("http://0.0.0.0:5000"); // Allow all devices in the network
 app.Urls.Add("https://0.0.0.0:5001"); // If using HTTPS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll",
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
-        });
-});
+
 app.UseCors("AllowAll");
 
 
