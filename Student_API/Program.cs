@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Student_API.Data;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,42 +23,34 @@ builder.Services.AddCors(options =>
 
 
 
-// the if else statement is used to check if the environment is development or production
-var env = builder.Environment;
-
-
 //for ubuntu
 //"ConnectionStrings": {
 //    "ProductionConnection": "Server=192.168.100.109;Database=EmployeesDb;Port=3306;User=root;Password=Andrei_123!;"
 //},
 
-string connectionString;
 
-if (env.IsDevelopment())
-{
-    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-}
-else if (env.IsProduction())
-{
-    connectionString = builder.Configuration.GetConnectionString("ProductionConnection");
-}
-else
-{
-    throw new Exception("Invalid Environment Configuration!");
-}
+var environment = builder.Environment.EnvironmentName;
+Console.WriteLine($"Environment: {environment}");
 
-connectionString = "Server=172.31.89.26;Database=EmployeesDb;Port=3306;User=root;Password=Andrei_123!";
-Console.WriteLine("the Enviroment is:" + env);
-Console.WriteLine("THE CONNECTION STRING IS: " + connectionString);
+var dbHost = builder.Configuration["DB_HOST"] ?? "localhost";
+var dbPort = builder.Configuration["DB_PORT"] ?? "3306";
+var dbName = builder.Configuration["DB_NAME"] ?? "EmployeesDb";
+var dbUser = builder.Configuration["DB_USER"] ?? "root";
+var dbPass = builder.Configuration["DB_PASS"] ?? "";
+//connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+
+var connectionString = $"Server={dbHost};Port={dbPort};Database={dbName};User={dbUser};Password={dbPass};";
+Console.WriteLine($"Using Connection String: {connectionString}");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(
-        connectionString,
-        ServerVersion.AutoDetect(connectionString)
-    ));
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+);
 
-using (var scope = builder.Services.BuildServiceProvider().CreateScope())
+
+var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
@@ -65,21 +58,18 @@ using (var scope = builder.Services.BuildServiceProvider().CreateScope())
     {
         Console.WriteLine("Testing database connection...");
         dbContext.Database.OpenConnection();
-        Console.WriteLine("Database connection successful!");
+        Console.WriteLine("? Database connection successful!");
         dbContext.Database.CloseConnection();
     }
     catch (Exception ex)
     {
-        Console.WriteLine("Error connecting to database: " + ex.Message);
+        Console.WriteLine("? Error connecting to database: " + ex.Message);
     }
 }
-
 
 // add-migration "Initial Migration"
 // to run the migration --- update-database
 
-
-var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())

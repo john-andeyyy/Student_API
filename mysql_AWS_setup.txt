@@ -1,0 +1,31 @@
+aws
+
+-- Locate the Temporary Root Password
+sudo grep 'temporary password' /var/log/mysqld.log
+
+-- for bypass the authentication
+sudo systemctl stop mysqld
+sudo mysqld --skip-grant-tables --skip-networking --user=mysql &
+
+-- login with out password
+mysql -u root
+
+-- set new root password
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'NewPassword123!';
+FLUSH PRIVILEGES;
+EXIT;
+
+
+-- know the ip address public ip
+ curl http://checkip.amazonaws.com
+
+-- run 
+ dotnet ./publish/Student_API.dll --urls "http://*:5000;"
+
+
+
+
+
+
+
+
