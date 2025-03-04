@@ -1,3 +1,18 @@
+after git pull origin master
+
+-- Stop the Running Service
+sudo systemctl stop Student_API.service
+-- Rebuild and Publish the API
+dotnet publish -c Release -o publish
+-- dotnet publish -c Release -o publish
+sudo systemctl restart Student_API.service
+-- Check if the API is Running Correctly
+sudo systemctl status Student_API.service
+--  Check the Logs (If Needed)
+journalctl -u Student_API.service --no-pager --lines=50
+
+
+#
 sudo nano /etc/systemd/system/Student_API.service
 [Unit]
 Description=Student API Service

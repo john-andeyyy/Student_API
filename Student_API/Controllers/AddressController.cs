@@ -100,17 +100,29 @@ namespace Student_API.Controllers
             return Ok(addExisting);
         }
 
+
         [HttpDelete("Address/{id}")]
         public IActionResult DeleteAddress(int id)
         {
-            var isExsisting = dbContext.Address.Find(id);
-            if (isExsisting == null) return NotFound("Address Not Found!!");
+            var address = dbContext.Address.Find(id);
+            if (address == null) return NotFound("Address Not Found!!");
 
-            dbContext.Remove(isExsisting);
-            dbContext.SaveChanges();
-            return Ok("Delete Successfully");
-
+            try
+            {
+                dbContext.Remove(address);
+                dbContext.SaveChanges();
+                return Ok("Delete Successfully");
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+            {
+                if (ex.InnerException is MySqlConnector.MySqlException mysqlEx && mysqlEx.Number == 1451)
+                {
+                    return BadRequest("Cannot delete address because it is referenced by students.");
+                }
+                return StatusCode(500, "An error occurred while deleting the address.");
+            }
         }
+
 
     }
 }
