@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Student_API.Data;
 using System;
 
@@ -58,12 +58,12 @@ using (var scope = app.Services.CreateScope())
     {
         Console.WriteLine("Testing database connection...");
         dbContext.Database.OpenConnection();
-        Console.WriteLine("? Database connection successful!");
+        Console.WriteLine("✅ Database connection successful!");
         dbContext.Database.CloseConnection();
     }
     catch (Exception ex)
     {
-        Console.WriteLine("? Error connecting to database: " + ex.Message);
+        Console.WriteLine("❌ Error connecting to database: " + ex.Message);
     }
 }
 
@@ -89,6 +89,6 @@ app.UseCors("AllowAll");
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapGet("/", () => Results.Json(new { message = connectionString }));
+app.MapGet("/", () => Results.Json(new { message = "Hello world!" }));
 
 app.Run();
