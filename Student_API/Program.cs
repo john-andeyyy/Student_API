@@ -45,6 +45,8 @@ else
 {
     throw new Exception("Invalid Environment Configuration!");
 }
+
+connectionString = "Server=172.31.89.26;Database=EmployeesDb;Port=3306;User=root;Password=Andrei_123!";
 Console.WriteLine("the Enviroment is:" + env);
 Console.WriteLine("THE CONNECTION STRING IS: " + connectionString);
 
