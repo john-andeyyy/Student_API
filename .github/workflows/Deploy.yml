@@ -19,7 +19,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ec2-user/Student_API-ec2/Student_API
-            git pull origin main  # Pull latest changes
+            git pull origin master  # Pull latest changes
             
             # Stop the service before building
             sudo systemctl stop Student_API.service  
@@ -31,6 +31,7 @@ jobs:
             
             # Reload systemd and restart the service
             sudo systemctl daemon-reload  
+            
             sudo systemctl restart Student_API.service  
             
             # Check service status and logs
