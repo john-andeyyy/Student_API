@@ -38,5 +38,4 @@ jobs:
             sudo systemctl restart Student_API.service   &&
 
             # Check service status and logs
-            sudo systemctl status Student_API.service   &&
-            sudo journalctl -fu Student_API.service 
+            sudo systemctl status Student_API.service 
