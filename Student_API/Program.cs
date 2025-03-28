@@ -86,6 +86,6 @@ app.UseCors("AllowAll");
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapGet("/", () => Results.Json(new { message = "Hello world!!, using git action test 4" }));
+app.MapGet("/", () => Results.Json(new { message = "Hello world!!, using git action test 5" }));
 
 app.Run();

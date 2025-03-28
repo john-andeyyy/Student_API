@@ -5,38 +5,38 @@ on:
     branches:
       - main
       - master
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Connect to EC2 and update code
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 44.212.35.61
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ec2-user/Student_API-ec2/Student_API &&
+            
+            git checkout master &&
+            git fetch --all &&
+            git reset --hard origin/master &&
+            git pull origin master &&
 
-      - name: Deploy to EC2
-        env:
-          PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          HOSTNAME: ${{ secrets.EC2_HOST }}
-          USER_NAME: ec2-user
-        run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} << 'EOF'
-            cd /home/ec2-user/Student_API-ec2/Student_API
+            # Stop the service before building
+            sudo systemctl stop Student_API.service &&
 
-            # Update code
-            git fetch --all
-            git reset --hard origin/master
+            # Clean, build, and publish the project
+            dotnet clean   &&
+            dotnet build --configuration Release   &&
+            dotnet publish -c Release -o /home/ec2-user/Student_API-ec2/publish   &&
 
-            # Stop the running service
-            sudo systemctl stop Student_API.service
+            # Reload systemd and restart the service
+            sudo systemctl daemon-reload   &&
+            sudo systemctl restart Student_API.service   &&
 
-            # Clean, build, and publish .NET app
-            dotnet clean
-            dotnet build --configuration Release
-            dotnet publish -c Release -o /home/ec2-user/Student_API-ec2/publish
-
-            # Restart the service
-            sudo systemctl daemon-reload
-            sudo systemctl restart Student_API.service
-            sudo systemctl status Student_API.service
-          EOF
+            # Check service status and logs
+            sudo systemctl status Student_API.service   &&
+            sudo journalctl -fu Student_API.service 
