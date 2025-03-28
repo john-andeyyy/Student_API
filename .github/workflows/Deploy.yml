@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - master 
+      - master  
 
 jobs:
   deploy:
@@ -15,10 +15,10 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}  
-          username: ubuntu 
-          key: ${{ secrets.EC2_SSH_KEY }}  
+          username: ec2-user 
+          key: ${{ secrets.EC2_SSH_KEY }}  # .pem
           script: |
-            cd /home/ubuntu/app  # Pumunta sa repo directory
+            cd /Student_API-ec2/Student_API  # Path kung saan naka-clone ang repo
             git pull origin main  # Kunin ang latest code mula sa GitHub
             dotnet publish -c Release -o published  # I-build ang bagong code
-            sudo systemctl restart Student_API.service   # Restart ang systemd service
+            sudo systemctl restart myapp.service  # Restart ang systemd service
