@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - master  
+      - master
 
 jobs:
   deploy:
@@ -14,12 +14,12 @@ jobs:
       - name: Connect to EC2 and update code
         uses: appleboy/ssh-action@v1.0.3
         with:
-        #   host: ${{ secrets.EC2_HOST }}  
+          #   host: ${{ secrets.EC2_HOST }}
           host: 44.212.35.61
-          username: ec2-user 
-          key: ${{ secrets.EC2_SSH_KEY }}  # .pem value mula sa AWS EC2 instance
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }} # .pem value mula sa AWS EC2 instance
           script: |
             cd /Student_API-ec2/Student_API  # Path kung saan naka-clone ang repo
             git pull origin main  # Kunin ang latest code mula sa GitHub
             dotnet publish -c Release -o published  # I-build ang bagong code
-            sudo systemctl restart myapp.service  # Restart ang systemd service
+            sudo systemctl restart Student_API.service  # Restart ang systemd service
