@@ -14,7 +14,8 @@ jobs:
       - name: Connect to EC2 and update code
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.EC2_HOST }}  
+        #   host: ${{ secrets.EC2_HOST }}  
+          host: 44.212.35.61
           username: ec2-user 
           key: ${{ secrets.EC2_SSH_KEY }}  # .pem value mula sa AWS EC2 instance
           script: |
