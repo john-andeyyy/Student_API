@@ -70,7 +70,7 @@ using (var scope = app.Services.CreateScope())
 
     // Run migrations automatically on startup
     var migrator = services.GetRequiredService<IMigrationRunner>();
-    migrator.MigrateUp();
+    // migrator.MigrateUp();
 }
 
 // Configure the HTTP request pipeline
@@ -86,6 +86,6 @@ app.UseCors("AllowAll");
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapGet("/", () => Results.Json(new { message = "Hello world!!, using git action" }));
+app.MapGet("/", () => Results.Json(new { message = "Hello world!!, using git action ..." }));
 
 app.Run();
