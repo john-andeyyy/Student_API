@@ -86,6 +86,6 @@ app.UseCors("AllowAll");
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapGet("/", () => Results.Json(new { message = "Hello world!" }));
+app.MapGet("/", () => Results.Json(new { message = "Hello world!!" }));
 
 app.Run();
